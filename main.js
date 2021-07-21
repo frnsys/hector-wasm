@@ -1,3 +1,7 @@
+import wasmHector from "./build/hector.js";
+
+let WASM;
+
 // Log to screen
 function log(msg) {
   let el = document.createElement('div');
@@ -50,9 +54,9 @@ function set_emissions(h, scenario) {
   Object.keys(emissions).forEach((section) => {
     emissions[section].forEach((source) => {
       if (columns.includes(source)) {
-        let yearsVec = new Module.VectorSizeT();
+        let yearsVec = new WASM.VectorSizeT();
         Object.keys(scenario[source]).map((v) => yearsVec.push_back(parseInt(v)));
-        let valuesVec = new Module.VectorDouble();
+        let valuesVec = new WASM.VectorDouble();
         Object.values(scenario[source]).forEach((v) => valuesVec.push_back(v));
         h._set_timed_array(section, source, yearsVec, valuesVec);
       }
@@ -61,10 +65,12 @@ function set_emissions(h, scenario) {
 }
 
 
-Module.onRuntimeInitialized = () => {
-  log(`Hector version ${Module.Hector.version()}`);
+new wasmHector().then((wasm) => {
+  WASM = wasm;
+
+  log(`Hector version ${wasm.Hector.version()}`);
   try {
-    let hector = new Module.Hector();
+    let hector = new wasm.Hector();
 
     var t0 = performance.now()
     config(hector, defaultConfig);
@@ -111,9 +117,9 @@ Module.onRuntimeInitialized = () => {
 
   } catch (exception) {
     if (typeof(exception) === 'number') {
-      console.error(Module.getExceptionMessage(exception));
+      console.error(wasm.getExceptionMessage(exception));
     } else {
       console.error(exception);
     }
   }
-};
+});
