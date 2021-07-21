@@ -80,7 +80,7 @@ From [the Emscripten documentation](https://emscripten.org/docs/optimizing/Optim
 
 > Emscripten-compiled code can currently achieve approximately half the speed of a native build.
 
-It takes about ~1 second to run in both Firefox (92.0a1) and Chrome (91.0.4472.164). This is when using only one observer/output variable; more will add to the runtime. For reference, `pyhector` (which uses Hector 2.4.0, this WASM build is using 2.5.0) with the three default observers/outputs runs in about 1.5-2 seconds (this is a very rough comparison).
+It takes under 1 second to run in both Firefox (92.0a1) and Chrome (91.0.4472.164) (in Chrome I hit under 500ms). This is when using only one observer/output variable; more will add to the runtime. For reference, `pyhector` (which uses Hector 2.4.0, this WASM build is using 2.5.0) with the three default observers/outputs runs in about 1.5-2 seconds (this is a very rough comparison).
 
 About a quarter of that time is setting the scenario emissions--the overhead is probably from the conversion of JS arrays into vectors.
 
