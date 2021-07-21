@@ -6,9 +6,7 @@
   "version": "0.1.0",
   "files": [
     "lib.js",
-    "dist/hector.js",
-    "dist/hector.wasm"
+    "dist/*"
   ],
-  "module": "lib.js",
-  "sideEffects": false
+  "module": "lib.js"
 }

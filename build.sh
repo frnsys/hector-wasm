@@ -59,6 +59,7 @@ em++ --std=c++14 \
     -s EXPORT_ES6=1 \
     -s USE_ES6_IMPORT_META=0 \
     -s ENVIRONMENT='web' \
+    -s SINGLE_FILE=1 \
     -o dist/hector.js "${sources[@]}"
 
 # Update wasmBinaryFile path to point to correct file
