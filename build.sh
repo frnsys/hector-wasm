@@ -32,14 +32,33 @@ sources=(
 )
 
 mkdir -p build
+
+OPT_ARGS=()
 if [ "$DEBUG" = true ]; then
     # https://emscripten.org/docs/porting/Debugging.html
     echo "Compiling debug..."
-    EMCC_DEBUG=1 em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -g -s ASSERTIONS=1 -s NO_DISABLE_EXCEPTION_CATCHING -s LLD_REPORT_UNDEFINED -s ALLOW_MEMORY_GROWTH=1 -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js "${sources[@]}"
+    OPT_ARGS+=( -g )
+    export EMCC_DEBUG=1
 else
     echo "Compiling..."
-    em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s EXCEPTION_CATCHING_ALLOWED=["_ZN6Hector17CarbonCycleSolver3runEd"] -s ALLOW_MEMORY_GROWTH=1 -s MALLOC=emmalloc -s USE_BOOST_HEADERS=1 -s FILESYSTEM=0 -s WASM=1 -s MODULARIZE=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -o build/hector.js "${sources[@]}"
+    OPT_ARGS+=( -O3 -flto )
 fi
+
+em++ --std=c++14 \
+    -Iinclude/ -Ihector/inst/include/ \
+    -DNO_LOGGING \
+    --bind --no-entry \
+    "${OPT_ARGS[@]}" \
+    -s EXCEPTION_CATCHING_ALLOWED=["_ZN6Hector17CarbonCycleSolver3runEd"] \
+    -s ALLOW_MEMORY_GROWTH=1 \
+    -s MALLOC=emmalloc \
+    -s USE_BOOST_HEADERS=1 \
+    -s FILESYSTEM=0 \
+    -s WASM=1 \
+    -s MODULARIZE=1 \
+    -s EXPORT_ES6=1 \
+    -s USE_ES6_IMPORT_META=0 \
+    -o build/hector.js "${sources[@]}"
 
 # Update wasmBinaryFile path to point to correct file
 sed -i 's/hector.wasm/build\/hector.wasm/' build/hector.js
