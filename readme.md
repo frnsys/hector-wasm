@@ -72,7 +72,7 @@ Compile a debug build or just a regular build but with `EMCC_DEBUG=1`. Emscripte
 
 One of those should be the `CarbonCycleSolver::run` method.
 
-Compiled in this way the resulting total file size is about 600k (for both the `.js` and `.wasm` files total).
+Compiled in this way the resulting total file size is about 600KB (for both the `.js` and `.wasm` files total).
 
 # Performance
 
@@ -89,6 +89,10 @@ Before the fix for the exception issue above it took about ~3 seconds to run in 
 # File sizes
 
 See <https://emscripten.org/docs/optimizing/Optimizing-Code.html>
+
+# Misc notes
+
+- This currently compiles to a single `.js` file with the wasm embedded into it. I was having issues importing the library, where Emscripten hardcodes the path to the `.wasm` file (e.g. to `dist/hector.wasm`). If this library is loaded as part of a Webpack project that path is incorrect (when I tested it the browser looked for it at `/dist/dist/hector.wasm`). Compiling to a single `.js` file gets around this problem, but it is a fair bit larger (750KB compared to 600KB before).
 
 # Citations
 
