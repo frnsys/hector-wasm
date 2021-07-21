@@ -1,0 +1,14 @@
+{
+  "name": "hector-wasm",
+  "collaborators": [
+    "Francis Tseng"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "lib.js",
+    "dist/hector.js",
+    "dist/hector.wasm"
+  ],
+  "module": "lib.js",
+  "sideEffects": false
+}
