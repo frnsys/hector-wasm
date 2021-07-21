@@ -39,7 +39,19 @@ DEBUG=true ./build.sh
 
 # Usage
 
+See `main.js` for an example.
 
+# Known Issues
+
+Currently the optimized build runs into an `index out of bounds` error unless the `-s ASSERTIONS=1 -s NO_DISABLE_EXCEPTION_CATCHING` flags are included, which results in larger file sizes (about 1.1MB total; without those flags its about 600KB) and [slower execution](https://github.com/emscripten-core/emscripten/blob/main/src/settings.js#L647).
+
+I have no idea why this error occurs unless `NO_DISABLE_EXCEPTION_CATCHING` is set...possibly related to: <https://github.com/emscripten-core/emscripten/issues/11544>?
+
+# Performance
+
+It takes about ~3 seconds to run once in Firefox 92.0a1 and about ~1-2 seconds on Chrome 91.0.4472.164. This is when using only one observer/output variable; more will add to the runtime.
+
+If the above known issue can be resolved it should go faster.
 
 # Citations
 

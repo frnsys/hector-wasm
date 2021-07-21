@@ -55,13 +55,15 @@ function set_emissions(h, scenario) {
 
 
 Module.onRuntimeInitialized = () => {
+  var t0 = performance.now()
   console.log(`Hector version ${Module.Hector.version()}`);
   try {
     let hector = new Module.Hector();
     config(hector, defaultConfig);
     set_emissions(hector, scenario);
 
-    Object.keys(outputs).forEach((k) => {
+    let outs = ['temperature.Tgav'];
+    outs.forEach((k) => {
         hector.add_observable(
           outputs[k]["component"],
           outputs[k]["variable"],
@@ -74,7 +76,7 @@ Module.onRuntimeInitialized = () => {
     console.log('ok');
 
     let results = {}
-    Object.keys(outputs).forEach((k) => {
+    outs.forEach((k) => {
       results[k] = hector.get_observable(
           outputs[k]["component"], outputs[k]["variable"], false
       );
@@ -93,6 +95,9 @@ Module.onRuntimeInitialized = () => {
 
     // Need to destroy to avoid memory leaks
     hector.delete();
+
+    var t1 = performance.now()
+    alert(`done in ${t1 - t0}ms`);
 
   } catch (exception) {
     if (typeof(exception) === 'number') {

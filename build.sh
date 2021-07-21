@@ -37,8 +37,6 @@ if [ "$DEBUG" = true ]; then
     em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -s NO_DISABLE_EXCEPTION_CATCHING -s LLD_REPORT_UNDEFINED -s ALLOW_MEMORY_GROWTH=1 -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js  "${sources[@]}"
 else
     echo "Compiling..."
-    # em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -s ALLOW_MEMORY_GROWTH=1 -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js  "${sources[@]}"
-    # em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s INITIAL_MEMORY=67108864 -s USE_BOOST_HEADERS=1 -s WASM=1 -s ASSERTIONS=1 -s NO_DISABLE_EXCEPTION_CATCHING -o build/hector.js  "${sources[@]}"
-    em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s SAFE_HEAP=1 -s ASSERTIONS=1 -s INITIAL_MEMORY=67108864 -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js  "${sources[@]}"
+    em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s ALLOW_MEMORY_GROWTH=1 -s ASSERTIONS=1 -s NO_DISABLE_EXCEPTION_CATCHING -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js  "${sources[@]}"
 fi
 echo "Done."
