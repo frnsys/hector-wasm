@@ -31,7 +31,7 @@ sources=(
 "hector/src/unitval.cpp"
 )
 
-mkdir -p build
+mkdir -p dist
 
 OPT_ARGS=()
 if [ "$DEBUG" = true ]; then
@@ -58,9 +58,9 @@ em++ --std=c++14 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
     -s USE_ES6_IMPORT_META=0 \
-    -o build/hector.js "${sources[@]}"
+    -o dist/hector.js "${sources[@]}"
 
 # Update wasmBinaryFile path to point to correct file
-sed -i 's/hector.wasm/build\/hector.wasm/' build/hector.js
+sed -i 's/hector.wasm/dist\/hector.wasm/' dist/hector.js
 
 echo "Done."

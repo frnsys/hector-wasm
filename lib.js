@@ -1,4 +1,4 @@
-import wasmHector from "./build/hector.js";
+import wasmHector from "./dist/hector.js";
 
 function setValue(h, section, variable, value) {
   if (Array.isArray(value)) {
