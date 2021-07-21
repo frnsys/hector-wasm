@@ -38,7 +38,7 @@ if [ "$DEBUG" = true ]; then
     EMCC_DEBUG=1 em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -g -s ASSERTIONS=1 -s NO_DISABLE_EXCEPTION_CATCHING -s LLD_REPORT_UNDEFINED -s ALLOW_MEMORY_GROWTH=1 -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js "${sources[@]}"
 else
     echo "Compiling..."
-    em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s EXCEPTION_CATCHING_ALLOWED=["_ZN6Hector17CarbonCycleSolver3runEd"] -s ALLOW_MEMORY_GROWTH=1 -s MALLOC=emmalloc -s USE_BOOST_HEADERS=1 -s WASM=1 -o build/hector.js "${sources[@]}"
+    em++ --std=c++14 -Iinclude/ -Ihector/inst/include/ -DNO_LOGGING --bind --no-entry -O3 -flto -s EXCEPTION_CATCHING_ALLOWED=["_ZN6Hector17CarbonCycleSolver3runEd"] -s ALLOW_MEMORY_GROWTH=1 -s MALLOC=emmalloc -s USE_BOOST_HEADERS=1 -s FILESYSTEM=0 -s WASM=1 -o build/hector.js "${sources[@]}"
 
 fi
 echo "Done."

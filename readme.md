@@ -72,7 +72,7 @@ Compile a debug build or just a regular build but with `EMCC_DEBUG=1`. Emscripte
 
 One of those should be the `CarbonCycleSolver::run` method.
 
-Compiled in this way the resulting total file size is about 650k (for both the `.js` and `.wasm` files total).
+Compiled in this way the resulting total file size is about 600k (for both the `.js` and `.wasm` files total).
 
 # Performance
 
