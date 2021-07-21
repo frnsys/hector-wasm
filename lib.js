@@ -1,4 +1,5 @@
-import wasmHector from "./dist/hector.js";
+import wasmHector from './dist/hector.js';
+import emissions from './config/emissions.js';
 
 function setValue(h, section, variable, value) {
   if (Array.isArray(value)) {
@@ -47,7 +48,7 @@ function set_emissions(h, scenario, wasm) {
 }
 
 
-function run(wasm, config, emissionsScenario, outputVars) {
+function run(wasm, config, emissionsScenario, outputs) {
   const hector = new wasm.Hector();
 
   // Set config
@@ -63,11 +64,11 @@ function run(wasm, config, emissionsScenario, outputVars) {
 
   // Create observers for output variables
   // The more there are, the slower it runs!
-  outputVars.forEach((k) => {
+  Object.keys(outputs).forEach((k) => {
       hector.add_observable(
-        outputs[k]["component"],
-        outputs[k]["variable"],
-        outputs[k]["needs_date"] || false,
+        outputs[k]['component'],
+        outputs[k]['variable'],
+        outputs[k]['needs_date'] || false,
         false
       )
   });
@@ -75,9 +76,9 @@ function run(wasm, config, emissionsScenario, outputVars) {
   hector.run();
 
   let results = {}
-  outputVars.forEach((k) => {
+  Object.keys(outputs).forEach((k) => {
     results[k] = hector.get_observable(
-        outputs[k]["component"], outputs[k]["variable"], false
+        outputs[k]['component'], outputs[k]['variable'], false
     );
 
     // Convert to JS array

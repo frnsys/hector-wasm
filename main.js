@@ -1,4 +1,7 @@
-import loadHector from "./lib.js";
+import loadHector from './lib.js';
+import outputs from './config/outputs.js';
+import scenario from './scenarios/rcp45.js';
+import defaultConfig from './config/defaultConfig.js';
 
 // Log to screen
 function log(msg) {
@@ -7,7 +10,9 @@ function log(msg) {
   document.body.appendChild(el);
 }
 
-let outputVars = ['temperature.Tgav'];
+let outputVars = {
+  'temperature.Tgav': outputs['temperature.Tgav']
+};
 loadHector().then(({Hector, run}) => {
   log(`Hector version ${Hector.version()}`);
 

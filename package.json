@@ -6,7 +6,8 @@
   "version": "0.1.0",
   "files": [
     "lib.js",
-    "dist/*"
+    "dist/*",
+    "config/*"
   ],
   "module": "lib.js"
 }
