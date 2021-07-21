@@ -1,3 +1,10 @@
+// Log to screen
+function log(msg) {
+  let el = document.createElement('div');
+  el.innerText = msg;
+  document.body.appendChild(el);
+}
+
 function setValue(h, section, variable, value) {
   if (Array.isArray(value)) {
     if (value.length == 2 && typeof(value[1]) == 'string') {
@@ -55,12 +62,15 @@ function set_emissions(h, scenario) {
 
 
 Module.onRuntimeInitialized = () => {
-  var t0 = performance.now()
-  console.log(`Hector version ${Module.Hector.version()}`);
+  log(`Hector version ${Module.Hector.version()}`);
   try {
     let hector = new Module.Hector();
+
+    var t0 = performance.now()
     config(hector, defaultConfig);
     set_emissions(hector, scenario);
+    var t1 = performance.now()
+    log(`Loading config and emissions done in ${t1 - t0}ms`);
 
     let outs = ['temperature.Tgav'];
     outs.forEach((k) => {
@@ -71,9 +81,11 @@ Module.onRuntimeInitialized = () => {
           false
         )
     });
-    console.log('Running...');
+    log('Running...');
+    var t2 = performance.now()
     hector.run()
-    console.log('ok');
+    var t3 = performance.now()
+    log(`Done running in ${t3 - t2}ms`);
 
     let results = {}
     outs.forEach((k) => {
@@ -96,8 +108,6 @@ Module.onRuntimeInitialized = () => {
     // Need to destroy to avoid memory leaks
     hector.delete();
 
-    var t1 = performance.now()
-    alert(`done in ${t1 - t0}ms`);
 
   } catch (exception) {
     if (typeof(exception) === 'number') {
