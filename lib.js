@@ -33,14 +33,15 @@ function setValue(h, section, variable, value) {
 }
 
 function set_emissions(h, scenario, wasm) {
-  const columns = Object.keys(scenario);
+  const startYear = scenario['startYear'];
+  const columns = Object.keys(scenario['data']);
   Object.keys(emissions).forEach((section) => {
     emissions[section].forEach((source) => {
       if (columns.includes(source)) {
         let yearsVec = new wasm.VectorSizeT();
-        Object.keys(scenario[source]).map((v) => yearsVec.push_back(parseInt(v)));
+        Object.keys(scenario['data'][source]).map((v) => yearsVec.push_back(startYear + parseInt(v)));
         let valuesVec = new wasm.VectorDouble();
-        Object.values(scenario[source]).forEach((v) => valuesVec.push_back(v));
+        Object.values(scenario['data'][source]).forEach((v) => valuesVec.push_back(v));
         h._set_timed_array(section, source, yearsVec, valuesVec);
       }
     });
