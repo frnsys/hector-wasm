@@ -57,11 +57,8 @@ em++ --std=c++14 \
     -s WASM=1 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
-    -s USE_ES6_IMPORT_META=0 \
+    -s USE_ES6_IMPORT_META=1 \
     -s ENVIRONMENT='web' \
     -o dist/hector.js "${sources[@]}"
-
-# Update wasmBinaryFile path to point to correct file
-sed -i 's/hector.wasm/dist\/hector.wasm/' dist/hector.js
 
 echo "Done."

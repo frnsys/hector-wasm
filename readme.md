@@ -31,7 +31,26 @@ DEBUG=true ./build.sh
 
 See `main.js` for an example.
 
+## Webpack
+
+Inclusion in Webpack is a little tricky, but what I've found to work is to include a specific rule targeting `hector.wasm` so that Webpack loads it in as a regular file. For example, your `webpack.config.js` would include something like:
+
+```
+module.exports = {
+  // ...
+  module: {
+    rules: [{
+      test: /hector\.wasm/,
+      type: 'asset'
+    }]
+  },
+  // ...
+};
+```
+
 # Known Issues
+
+## [FIXED] Can't run optimized build
 
 Currently the optimized build runs into an `index out of bounds` error unless the `-s NO_DISABLE_EXCEPTION_CATCHING` flag is included, which results in larger file sizes (about 1.1MB total; without that flag its about 600KB) and [slower execution](https://github.com/emscripten-core/emscripten/blob/main/src/settings.js#L647).
 
