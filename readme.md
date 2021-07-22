@@ -11,17 +11,7 @@ cd emsdk
 
 The build script (see below) expects that the Emscripten SDK is available in `emsdk/`, so if you already have an installation, symlink it there.
 
-Then you need to prepare the `hector` code:
-
-```
-git clone https://github.com/JGCRI/hector
-cd hector
-git checkout 417a174d2df2f3bbe928c0e7bccf8ca7c43bd700
-
-# Apply a patch that effectively lets us disable logging,
-# which removes the need for Boost Filesystem
-git apply no_logging.patch
-```
+Then you need to prepare the `hector` code by running `./setup.sh`.
 
 # Compiling
 
