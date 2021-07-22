@@ -10,5 +10,6 @@
     "config/*",
     "scenarios/*"
   ],
-  "module": "lib.js"
+  "module": "lib.js",
+  "sideEffects": false
 }
