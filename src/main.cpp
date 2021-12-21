@@ -17,6 +17,7 @@ EMSCRIPTEN_BINDINGS(hector) {
     .function("run", &Hector::run)
     .function("reset", &Hector::reset)
     .function("shutdown", &Hector::shutdown)
+    .function("prepareToRun", &Hector::prepareToRun)
     .function("add_observable", &Hector::add_observable)
     .function("get_observable", &Hector::get_observable)
     .function("_set_string",

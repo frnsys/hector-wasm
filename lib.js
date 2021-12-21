@@ -48,77 +48,81 @@ function set_emissions(h, scenario, wasm) {
   });
 }
 
-
-function run(wasm, config, emissionsScenario, outputs) {
-  const hector = new wasm.Hector();
-
-  // Set config
-  Object.keys(config).forEach((section) => {
-    Object.keys(config[section]).forEach((variable) => {
-      let val = config[section][variable];
-      setValue(hector, section, variable, val);
-    });
-  });
-
-  // Set emissions
-  set_emissions(hector, emissionsScenario, wasm);
-
-  // Create observers for output variables
-  // The more there are, the slower it runs!
-  Object.keys(outputs).forEach((k) => {
-      hector.add_observable(
-        outputs[k]['component'],
-        outputs[k]['variable'],
-        outputs[k]['needs_date'] || false,
-        false
-      )
-  });
-
-  hector.run();
-
-  let results = {}
-  Object.keys(outputs).forEach((k) => {
-    results[k] = hector.get_observable(
-        outputs[k]['component'], outputs[k]['variable'], false
-    );
-
-    // Convert to JS array
-    // TODO is there a better way?
-    let arr = [];
-    for (let i=0; i<results[k].size(); i++) {
-      arr.push(results[k].get(i));
-    }
-    results[k] = arr;
-  });
-
-  hector.shutdown();
-
-  // Need to destroy to avoid memory leaks
-  hector.delete();
-
-  return results;
-}
-
-
-async function loadHector() {
+async function initHector(config, outputs) {
   return new wasmHector().then((wasm) => {
-    function runHector(config, emissionsScenario, outputVars) {
-      try {
-        return run(wasm, config, emissionsScenario, outputVars);
-      } catch (exception) {
-        if (typeof(exception) === 'number') {
-          console.error(wasm.getExceptionMessage(exception));
-        } else {
-          console.error(exception);
-        }
-      }
-    }
+    const hector = new wasm.Hector();
 
+    // Set config
+    Object.keys(config).forEach((section) => {
+      Object.keys(config[section]).forEach((variable) => {
+        let val = config[section][variable];
+        setValue(hector, section, variable, val);
+      });
+    });
+
+    // Create observers for output variables
+    // The more there are, the slower it runs!
+    Object.keys(outputs).forEach((k) => {
+        hector.add_observable(
+          outputs[k]['component'],
+          outputs[k]['variable'],
+          outputs[k]['needs_date'] || false,
+          false
+        )
+    });
+
+    let prepared = false;
     return {
-      Hector: wasm.Hector,
-      run: runHector
+      run: (endDate, emissionsScenario) => {
+        set_emissions(hector, emissionsScenario, wasm);
+        if (!prepared) {
+          hector.prepareToRun();
+          prepared = true;
+        }
+        try {
+          hector.run(endDate);
+
+          // Collect observables
+          let results = {}
+          Object.keys(outputs).forEach((k) => {
+            results[k] = hector.get_observable(
+                outputs[k]['component'], outputs[k]['variable'], false
+            );
+
+            // Convert to JS array
+            let arr = [];
+            for (let i=0; i<results[k].size(); i++) {
+              arr.push(results[k].get(i));
+            }
+            results[k] = arr;
+          });
+
+          return results;
+
+        } catch (exception) {
+          if (typeof(exception) === 'number') {
+            console.error(wasm.getExceptionMessage(exception));
+          } else {
+            console.error(exception);
+          }
+        }
+
+        // Reset to the end date so we
+        // can pick up from here
+        hector.reset(endDate);
+      },
+      reset: (resetDate) => {
+        hector.reset(resetDate);
+      },
+      shutdown: () => {
+        hector.shutdown();
+
+        // Need to destroy to avoid memory leaks
+        hector.delete();
+      }
     };
   });
 }
 
-export default loadHector;
+export default initHector;
+

@@ -39,9 +39,11 @@ class Hector {
     std::size_t spinup_size() const;
     double end_date();
     double start_date();
-    void run();
+    void run(double endDate);
+    void prepareToRun();
+
     void shutdown();
-    void reset();
+    void reset(double resetDate);
     void set(const std::string& section, const std::string& variable, const std::string& value);
     void set(const std::string& section, const std::string& variable, double value);
     void set(const std::string& section, const std::string& variable, std::size_t year, double value);

@@ -36,7 +36,13 @@ void Hector::Visitor::visit(hector::Core* hcore) {
 
 hector::Core* Hector::core() {
     if (!core_) {
-        reset();
+        /* reset(); */
+        core_.reset(new hector::Core(hector::Logger::WARNING, false, false));
+        core_->init();
+        core_->addVisitor(&visitor);
+        for (auto& observable : visitor.observables) {
+            observable.reset(core_.get());
+        }
     }
     return core_.get();
 }
@@ -64,10 +70,13 @@ double Hector::end_date() { return core()->getEndDate(); }
 
 double Hector::start_date() { return core()->getStartDate(); }
 
-void Hector::run() {
+void Hector::run(double endDate) {
+    core()->run(endDate);
+}
+
+void Hector::prepareToRun() {
     visitor.spinup_size = 0;
     core()->prepareToRun();
-    core()->run(-1);
 }
 
 void Hector::shutdown() {
@@ -75,13 +84,14 @@ void Hector::shutdown() {
     core_.reset();
 }
 
-void Hector::reset() {
-    core_.reset(new hector::Core(hector::Logger::WARNING, false, false));
-    core_->init();
-    core_->addVisitor(&visitor);
-    for (auto& observable : visitor.observables) {
-        observable.reset(core_.get());
-    }
+void Hector::reset(double resetDate) {
+    core()->reset(resetDate);
+    /* core_.reset(new hector::Core(hector::Logger::WARNING, false, false)); */
+    /* core_->init(); */
+    /* core_->addVisitor(&visitor); */
+    /* for (auto& observable : visitor.observables) { */
+    /*     observable.reset(core_.get()); */
+    /* } */
 }
 
 void Hector::set(const std::string& section, const std::string& variable, const std::string& value) {
