@@ -3,28 +3,27 @@
 If you don't have it, [download and setup Emscripten](https://emscripten.org/docs/getting_started/downloads.html):
 
 ```
-git clone https://github.com/emscripten-core/emsdk.git
-cd emsdk
-./emsdk install latest
-./emsdk activate latest
+just install_emsdk
 ```
 
 The build script (see below) expects that the Emscripten SDK is available in `emsdk/`, so if you already have an installation, symlink it there.
 
-Then you need to prepare the `hector` code by running `./setup.sh`.
-
-# Compiling
-
-Just run:
+Then you need to prepare the `hector` code:
 
 ```
-./build.sh
+just setup
+```
+
+Then to compile:
+
+```
+just build
 ```
 
 To create a debug build:
 
 ```
-DEBUG=true ./build.sh
+DEBUG=true just build
 ```
 
 # Usage
